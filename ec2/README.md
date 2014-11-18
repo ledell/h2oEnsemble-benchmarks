@@ -6,7 +6,7 @@
 
 ## Set up Amazon credentials
 In order to use these scripts, you will need your Amazon security credentials handy.
-- First, add your Amazon private key to your running instance.  There is a blank ~/.ssh/aws_key.pem` file which you can paste your private key into. 
+- First, add your Amazon private key to your running instance.  If you are using the H2O Ubuntu AMI, there will be a blank `~/.ssh/aws_key.pem` file which you can paste your private key into. 
 ```
 vim ~/.ssh/aws_key.pem
 chmod 400 ~/.ssh/aws_key.pem

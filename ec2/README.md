@@ -1,17 +1,17 @@
-# Amazon EC2 scripts for Ubuntu 14.04 LT2
+# Amazon EC2 scripts for Ubuntu 14.04 LTS
 
-- These scripts are modified versions of the scripts from the [h2o/ec2 folder](https://github.com/0xdata/h2o/tree/master/ec2) for working with Ubuntu instances.
+- These scripts are modified/Ubuntu versions of the scripts from the [h2o/ec2 folder](https://github.com/0xdata/h2o/tree/master/ec2).
 - Python and the boto library are required.
 
 
 ## Set up Amazon credentials
-In order to use these scripts, you should update the following lines in the `~/.bashrc` file of this instance (the master node).
-- Add your Amazon private key to your running instance.  There is a blank ~/.ssh/aws_key.pem` file which you can paste your private key into. 
+In order to use these scripts, you will need your Amazon security credentials handy.
+- First, add your Amazon private key to your running instance.  There is a blank ~/.ssh/aws_key.pem` file which you can paste your private key into. 
 ```
 vim ~/.ssh/aws_key.pem
 chmod 400 ~/.ssh/aws_key.pem
 ```
-- On the instance, update the EC2 keys section of `~/.bashrc` with your Amazon key info:
+- On your (master node) instance, update the EC2 keys section at the bottom of `~/.bashrc` with your key info:
 ```
 # EC2 keys
 export AWS_ACCESS_KEY_ID=""
@@ -46,12 +46,6 @@ instanceType = 'c3.8xlarge'
 ./h2o-cluster-distribute-aws-credentials.sh
 ./h2o-cluster-start-h2o.sh
 ```
-- If you need to distribute data files to the worker nodes, you can do that using the following script:
-```
-./h2o-cluster-distribute-data.sh /path/to/mydata.csv
-```
-However, if you use the specified AMI for the worker nodes, the benchmark data files should already exist on the worker nodes.  This is only if you want to add your own data files to the repo.
-
 
 ## Stop H2O cluster
 - This will stop the H2O cluster, but your worker nodes will still be running and can be terminated manually or using the boto library.  (Script to auto-terminate the worker instances is forthcoming.)

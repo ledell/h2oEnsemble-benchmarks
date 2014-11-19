@@ -2,7 +2,7 @@
 
 # This will copy a file from the master node to the same location on the worker nodes.
 # To use, pass the local file as an argument to the script:
-# ./h2o-cluster-distribute-data.sh ~/h2oEnsemble-benchmarks/data/twoClass/higgs_1k.csv
+# ./h2o-cluster-distribute-data.sh ~/h2oEnsemble-benchmarks/data/twoClass/higgs/higgs_1k.csv
 
 dataFile=$1
 dataFileName=`echo $(basename $dataFile)`

@@ -10,3 +10,4 @@ cd src/twoClass/higgs
 nohup ./run-bench.sh &
 ```
 - If you choose to use a single node instead of a multi-node cluster, you can skip the EC2 steps.  If a multi-node cluster is not available, the code will create a single node multicore cluster using all the cores available on your machine.
+- If the benchmark is not executed using the H2O Ubuntu AMI, you may have to change the path of the `BENCH_ROOT` variable in the scripts to point to the location of this repository on your machine.

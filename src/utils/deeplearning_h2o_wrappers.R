@@ -1,4 +1,4 @@
-# Create a bunch of h2o.randomForest wrappers from a grid of model params
+# Create a bunch of h2o.deeplearning wrappers from a grid of model params
 
 #source("model_utils.R")  #load model_wrapper_from_list()
 

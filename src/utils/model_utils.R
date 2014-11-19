@@ -25,6 +25,7 @@ model_wrapper_from_list <- function(mod) {
   # from a list of model parameters.
   
   require(digest)
+  require(h2oEnsemble)
   `%+%` <- function(a, b) paste0(a, b)
   
   if (tolower(mod$description)=="deeplearning") {

@@ -1,2 +1,8 @@
 data/*/*/*.csv
 models/*/*/*.rda
+ec2/aws_credentials.properties
+ec2/core-site.xml
+ec2/flatfile.txt
+ec2/nodes-private
+ec2/nodes-public
+

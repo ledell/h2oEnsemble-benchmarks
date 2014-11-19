@@ -46,6 +46,12 @@ instanceType = 'c3.8xlarge'
 ./h2o-cluster-distribute-aws-credentials.sh
 ./h2o-cluster-start-h2o.sh
 ```
+- If you need to distribute data files to the worker nodes, you can do that using the following script:
+```
+./h2o-cluster-distribute-data.sh /path/to/mydata.csv
+```
+However, if you use the H2O Ubuntu AMI for the worker nodes, the benchmark data files already exist on the worker nodes and this is not necessary.
+
 
 ## Stop H2O cluster
 - This will stop the H2O cluster, but your worker nodes will still be running and can be terminated manually or using the boto library.  (Script to auto-terminate the worker instances is forthcoming.)

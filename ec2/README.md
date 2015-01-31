@@ -36,7 +36,12 @@ The `keyName` variable refers to the name (in Amazon) that you assigned to the k
 numInstancesToLaunch = 5
 instanceType = 'c3.8xlarge'
 ```
+Note that if this is your first time launching a large number of nodes on AWS, Amazon may require you to get pre-authorization and will deny your request in the meantime.
 - If you updated the `h2oEnsemble-benchmarks` repo, the AMI id specified in this script should be current and correct.
+- After making the neccessary edits above, execute the script to launch the EC2 cluster worker nodes:
+```
+./h2o-cluster-launch-instances.py
+```
 
 
 ## Start H2O cluster

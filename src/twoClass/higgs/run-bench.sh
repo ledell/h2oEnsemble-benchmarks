@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BENCH_ROOT="/home/ubuntu/h2oEnsemble-benchmarks"
-train_csv="higgs_1k.csv"
+train_csv="higgs_10k.csv"
 
 nodefile=$BENCH_ROOT/ec2/nodes-public
 if [ -f $nodefile ]; then

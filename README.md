@@ -1,6 +1,6 @@
-# h2oEnsemble Benchmarks
+# h2oEnsemble Benchmarks (H2O 2.0)
 
-*Note:* These benchmarks are for H2O 2.0 (aka. "H2O Classic").  The current version of H2O is H2O 3.0.  An H2O 3.0-compatible version of these benchmarks will be added in the future.  
+**Note:** These benchmarks are for [H2O 2.0](https://github.com/h2oai/h2o-2) (aka. "H2O Classic").  The current version of H2O is [H2O 3.0](https://github.com/h2oai/h2o-3).  An H2O 3.0-compatible version of these benchmarks will be added in the future.  
 
 This repository provides a framework for benchmarking the `h2oEnsemble` package.  The `h2oEnsemble` package provides an R API to train ensembles of [H2O](https://github.com/h2oai/h2o-2) machine learning algorithms.  You can read more about the "H2O Ensemble" project on its [GitHub page](https://github.com/h2oai/h2o-2/tree/master/R/ensemble). 
 

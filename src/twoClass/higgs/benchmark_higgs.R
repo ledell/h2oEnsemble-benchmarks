@@ -16,9 +16,9 @@ args <- (commandArgs(TRUE))
 if(length(args)>0){
   eval(parse(text=args))
 } else {
-  warning("Default training set will be used: higgs_1k.csv")
+  warning("Default training set will be used: higgs_train_1k.csv")
 }
-if (!exists("train_csv")) train_csv <- "higgs_1k.csv"
+if (!exists("train_csv")) train_csv <- "higgs_train_1k.csv"
 print(train_csv)
 if (!exists("cluster_ip")) cluster_ip <- "localhost"
 if (cluster_ip %in% c("localhost", "127.0.0.1")) {
@@ -83,7 +83,7 @@ fit <- h2o.ensemble(x = x, y = y, training_frame = train, family = family,
 print(fit$runtime)
 
 # Load test set and generate predictions on the test set
-test <- h2o.importFile(sprintf("%s/higgs_test.csv", data_path))
+test <- h2o.importFile(sprintf("%s/higgs_test_500k.csv", data_path))
 test[,y] <- as.factor(test[,y])
 
 

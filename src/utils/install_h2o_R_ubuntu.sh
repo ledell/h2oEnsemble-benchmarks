@@ -22,4 +22,8 @@ sudo apt-get install -y r-base r-base-dev r-recommended
 sudo apt-get install -y libcurl4-openssl-dev
 
 # Install h2oEnsemble
-sudo ./install_h2oEnsemble.R 
+sudo ./install_h2oEnsemble.R
+
+# To run on Amazon EC2 requires the Python boto library
+sudo apt-get install -y python-pip
+sudo pip install boto

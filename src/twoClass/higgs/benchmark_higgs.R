@@ -142,5 +142,5 @@ if (length(metalearners) > 1) {
   }
 }
 
-
+h2o.shutdown(prompt = FALSE)
 

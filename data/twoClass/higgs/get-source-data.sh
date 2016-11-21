@@ -4,6 +4,6 @@
 # The first column is the class label (1 = signal, 0 = background).
 # More info: https://archive.ics.uci.edu/ml/datasets/HIGGS
 
-wget https://archive.ics.uci.edu/ml/machine-learning-databases/00280/HIGGS.csv.gz
+curl -O https://archive.ics.uci.edu/ml/machine-learning-databases/00280/HIGGS.csv.gz
 gunzip HIGGS.csv.gz
 

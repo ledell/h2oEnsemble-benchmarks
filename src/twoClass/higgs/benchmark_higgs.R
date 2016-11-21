@@ -41,7 +41,7 @@ h2o.init(ip = cluster_ip, port = 54321, startH2O = startH2O, nthreads = -1)
 data_path <- sprintf("%s/data/twoClass/higgs", BENCH_ROOT)
 model_path <- sprintf("%s/models/twoClass/higgs", BENCH_ROOT)
 train <- h2o.importFile(sprintf("%s/%s", data_path, train_csv))
-y <- "C1"
+y <- "response"
 x <- setdiff(names(train), y)
 family <- "binomial"
 train[,y] <- as.factor(train[,y])  #Convert outcome to a factor for binary classification

@@ -40,10 +40,11 @@ h2o.init(ip = cluster_ip, port = 54321, startH2O = startH2O, nthreads = -1)
 # Load training data
 data_path <- sprintf("%s/data/twoClass/higgs", BENCH_ROOT)
 model_path <- sprintf("%s/models/twoClass/higgs", BENCH_ROOT)
-data <- h2o.importFile(localH2O, path = sprintf("%s/%s", data_path, train_csv))
+train <- h2o.importFile(sprintf("%s/%s", data_path, train_csv))
 y <- "C1"
 x <- setdiff(names(data), y)
 family <- "binomial"
+train[,y] <- as.factor(train[,y])  #Convert outcome to a factor for binary classification
 
 
 # Load the base learner and metalearner wrapper functions
@@ -53,7 +54,8 @@ source("../../utils/randomForest_h2o_wrappers.R")
 
 
 # Set up the ensemble by choosing a base learner library and metalearer
-# You should experiment with different sets of base learners
+# You should experiment with different sets of base learners using the supplied wrappers,
+# or even better, create your own custom wrappers for the base learners for a wider selection
 rf_learner <- c("h2o.randomForest.08f3779d812c53cc0d608ba4199b84ca")
 #dl_learner <- c("h2o.deeplearning.b5b29dfedea061bc0201efd7a9687ef4", "h2o.deeplearning.ccd3e304cf95b23447917dc937c21694")
 #dl_learner <- c("h2o.deeplearning.a6337d1830cc1958ee4db0af3da00fb8", "h2o.deeplearning.ccd3e304cf95b23447917dc937c21694")
@@ -66,40 +68,35 @@ dl_learner <- c("h2o.deeplearning.26cb32b0398c5facd4e8f7c976d29211",
 	"h2o.deeplearning.23a00746dc81a69753ef7182c792986a")
 	 
 
-learner <- c(rf_learner, dl_learner) 
+learner <- c(rf_learner, dl_learner)
+h2o.glm_nn <- function(..., non_negative = TRUE) {
+  h2o.glm.wrapper(..., non_negative = non_negative)
+}
 metalearners <- c("h2o.glm", "h2o.glm_nn") #Metalearners to use (only one at a time, multiple will create multiple fits)
 #metalearner <- "h2o.glm"
 
 
 # Train the ensemble
-fit <- h2o.ensemble(x = x, y = y, data = data, family = family, 
+fit <- h2o.ensemble(x = x, y = y, training_frame = train, family = family, 
                     learner = learner, metalearner = metalearners[1],
                     cvControl = list(V=2))
-
+print(fit$runtime)
 
 # Load test set and generate predictions on the test set
-newdata <- h2o.importFile(localH2O, path = sprintf("%s/higgs_test.csv", data_path))
-pred <- predict(fit, newdata)
+test <- h2o.importFile(sprintf("%s/higgs_test.csv", data_path))
+test[,y] <- as.factor(test[,y])
 
 
-# Ensemble test AUC
-print(metalearners[1])
-labels <- as.data.frame(newdata[,c(y)])[,1]
-auc <- AUC(predictions = as.data.frame(pred$pred)[,1], 
-      labels = labels)
+# Ensemble & base learner performance
+perf <- h2o.ensemble_performance(fit, newdata = test)
+auc <- h2o.auc(perf$ensemble)
 print(auc)
-
-
-# Base learner test set AUC (for comparison)
-L <- length(learner)
-cl <- makeCluster(min(L, detectCores()))
-clusterExport(cl, c("pred", "labels", "AUC")) 
-learner_auc <- parSapply(cl=cl, X=seq(L), function(i) AUC(as.data.frame(pred$basepred)[,i], labels)) 
-stopCluster(cl)
+learner_auc <- as.vector(sapply(perf$base, h2o.auc))
 print(learner_auc)
 
+
 # Save the results
-n_train <- nrow(data)
+n_train <- nrow(train)
 learner_md5 <- digest(learner, algo = c("md5"))
 metalearner_md5 <- digest(metalearners[1], algo = c("md5"))
 litefit <- fit
@@ -114,30 +111,32 @@ res <- list(fit = litefit,  #to save space, don't save fits for now
             learner_md5 = learner_md5,
             metalearner_md5 = metalearner_md5,
             n_train = n_train, 
-            n_test = nrow(newdata), 
+            n_test = nrow(test), 
             auc = auc, 
-            learner_auc = learner_auc)
+            learner_auc = learner_auc,
+            perf = perf)
 save(res, file = sprintf("%s/models/twoClass/higgs/h2oe_higgs_%s_%s_%s.rda", BENCH_ROOT, n_train, learner_md5, metalearner_md5))
+
 
 # Recombine using the remainder of the metalearners
 if (length(metalearners) > 1) {
   for (i in 2:length(metalearners)) {
     print(metalearners[i])
-    refit <- h2o.recombine(fit = fit, y = y, data = data, family = "binomial", metalearner = metalearners[i])
-    pred <- predict(refit, newdata)
-    auc <- AUC(predictions = as.data.frame(pred$pred)[,1], labels = labels)
+    refit <- h2o.metalearn(fit, metalearner = metalearners[i])
+    perf <- h2o.ensemble_performance(fit, newdata = test)
+    auc <- h2o.auc(perf$ensemble)
     print(auc)
-    # Base learner test set AUC (for comparison)
-    cl <- makeCluster(min(L, detectCores()))
-    clusterExport(cl, c("pred", "labels", "AUC"))
-    learner_auc <- parSapply(cl=cl, X=seq(L), function(i) AUC(as.data.frame(pred$basepred)[,i], labels))
-    stopCluster(cl)
+    learner_auc <- as.vector(sapply(perf$base, h2o.auc))
     print(learner_auc)
     metalearner_md5 <- digest(metalearners[i], algo = c("md5"))
+    litefit <- refit
+    litefit[["basefits"]] <- NULL
+    litefit[["metafit"]] <- NULL
+    litefit[["Z"]] <- NULL
+    res[["fit"]] <- litefit
     res[["metalearner_md5"]] <- metalearner_md5 
     res[["auc"]] <- auc
     res[["learner_auc"]] <- learner_auc 
-    # To do: Update fit$runtime$metalearning with new time
     save(res, file = sprintf("%s/models/twoClass/higgs/h2oe_higgs_%s_%s_%s.rda", BENCH_ROOT, n_train, learner_md5, metalearner_md5))
   }
 }

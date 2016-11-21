@@ -14,5 +14,11 @@ if ("h2o" %in% rownames(installed.packages())) { remove.packages("h2o") }
 # Specific versions are listed here, for reproducibility reasons, however newer versions
 # or both packages can be used as they become available.
 
+# Next, we download packages that H2O depends on.
+pkgs <- c("methods","statmod","stats","graphics","RCurl","jsonlite","tools","utils")
+for (pkg in pkgs) {
+  if (! (pkg %in% rownames(installed.packages()))) { install.packages(pkg) }
+}
+
 install.packages("h2o", type="source", repos=(c("http://h2o-release.s3.amazonaws.com/h2o/rel-turing/10/R")))
 install.packages("https://h2o-release.s3.amazonaws.com/h2o-ensemble/R/h2oEnsemble_0.1.8.tar.gz", repos = NULL)

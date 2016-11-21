@@ -30,8 +30,8 @@ print(cluster_ip)
 
 
 # Load libraries and establish H2O cluster connection
-source("../../utils/install_h2oEnsemble.R")
 library(h2oEnsemble)
+library(cvAUC)  #for validating old code only
 library(digest)  #To hash model param set
 h2o.init(ip = cluster_ip, port = 54321, startH2O = startH2O, nthreads = -1)
 #h2o.init(ip = "localhost", port = 54321, startH2O = startH2O, nthreads = -1, max_mem_size = "40960M")

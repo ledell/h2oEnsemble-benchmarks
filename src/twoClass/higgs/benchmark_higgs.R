@@ -136,7 +136,8 @@ if (length(metalearners) > 1) {
     res[["fit"]] <- litefit
     res[["metalearner_md5"]] <- metalearner_md5 
     res[["auc"]] <- auc
-    res[["learner_auc"]] <- learner_auc 
+    res[["learner_auc"]] <- learner_auc
+    res[["perf"]] <- perf
     save(res, file = sprintf("%s/models/twoClass/higgs/h2oe_higgs_%s_%s_%s.rda", BENCH_ROOT, n_train, learner_md5, metalearner_md5))
   }
 }

@@ -1,17 +1,19 @@
-# Amazon EC2 scripts for Ubuntu 14.04 LTS
+# Amazon EC2 scripts for Ubuntu 16.04
 
-- These scripts are modified/Ubuntu versions of the scripts from the [h2o/ec2 folder](https://github.com/0xdata/h2o/tree/master/ec2).
+- These scripts are modified/Ubuntu versions of the scripts from the [h2o/ec2 folder](https://github.com/h2oai/h2o-3/tree/master/ec2).
 - Python and the boto library are required.
 
 
 ## Set up Amazon credentials
 In order to use these scripts, you will need your Amazon security credentials handy.
 - First, add your Amazon private key to your running instance.  If you are using the H2O Ubuntu AMI, there will be a blank `~/.ssh/aws_key.pem` file which you can paste your private key into. 
+
 ```
 vim ~/.ssh/aws_key.pem
 chmod 400 ~/.ssh/aws_key.pem
 ```
-- On your (master node) instance, update the EC2 keys section at the bottom of `~/.bashrc` with your key info:
+- On your (master node) instance, update the EC2 keys section at the bottom of `~/.bashrc` with your key info (or simply type these commands into your shell if you don't want to modify your `~/.bashrc` file):
+
 ```
 # EC2 keys
 export AWS_ACCESS_KEY_ID=""

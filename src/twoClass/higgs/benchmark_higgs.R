@@ -30,13 +30,11 @@ print(cluster_ip)
 
 
 # Load libraries and establish H2O cluster connection
+source("../../utils/install_h2oEnsemble.R")
 library(h2oEnsemble)
-library(SuperLearner)  #For metalearner such as 'SL.glm'
-library(cvAUC)  #Used to calculate test set AUC
-library(doParallel)  #To calculate base learner test AUC in parallel
 library(digest)  #To hash model param set
-localH2O <-  h2o.init(ip = cluster_ip, port = 54321, startH2O = startH2O, nthreads = -1)
-#localH2O <-  h2o.init(ip = "localhost", port = 54321, startH2O = startH2O, nthreads = -1, max_mem_size = "40960M")
+h2o.init(ip = cluster_ip, port = 54321, startH2O = startH2O, nthreads = -1)
+#h2o.init(ip = "localhost", port = 54321, startH2O = startH2O, nthreads = -1, max_mem_size = "40960M")
 
 
 # Load training data
@@ -52,8 +50,6 @@ family <- "binomial"
 source("../../utils/model_utils.R")
 source("../../utils/deeplearning_h2o_wrappers.R")
 source("../../utils/randomForest_h2o_wrappers.R")
-source("../../utils/SuperLearner_wrappers.R")  #Loads SL.nnls metalearner function
-source("../../utils/recombine.R")  #Loads h2o.recombine function
 
 
 # Set up the ensemble by choosing a base learner library and metalearer
@@ -71,8 +67,8 @@ dl_learner <- c("h2o.deeplearning.26cb32b0398c5facd4e8f7c976d29211",
 	 
 
 learner <- c(rf_learner, dl_learner) 
-metalearners <- c("SL.glm", "SL.nnls") #Metalearners to use (only one at a time, multiple will create multiple fits)
-#metalearner <- "SL.nnls"
+metalearners <- c("h2o.glm", "h2o.glm_nn") #Metalearners to use (only one at a time, multiple will create multiple fits)
+#metalearner <- "h2o.glm"
 
 
 # Train the ensemble

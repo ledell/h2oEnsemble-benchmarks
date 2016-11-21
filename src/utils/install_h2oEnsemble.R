@@ -17,7 +17,7 @@ if ("h2o" %in% rownames(installed.packages())) { remove.packages("h2o") }
 # Next, we download packages that H2O depends on.
 pkgs <- c("methods","statmod","stats","graphics","RCurl","jsonlite","tools","utils")
 for (pkg in pkgs) {
-  if (! (pkg %in% rownames(installed.packages()))) { install.packages(pkg) }
+  if (! (pkg %in% rownames(installed.packages()))) { install.packages(pkg, repo="http://cran.rstudio.com/") }
 }
 
 install.packages("h2o", type="source", repos=(c("http://h2o-release.s3.amazonaws.com/h2o/rel-turing/10/R")))

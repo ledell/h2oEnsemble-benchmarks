@@ -105,7 +105,7 @@ litefit[["metafit"]] <- NULL
 litefit[["Z"]] <- NULL
 
 res <- list(fit = litefit,  #to save space, don't save fits for now 
-            pred = pred,
+            pred = NULL,  #from old version of the code
             learner = learner, 
             metalearner = metalearners[1], 
             learner_md5 = learner_md5,

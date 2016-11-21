@@ -42,7 +42,7 @@ data_path <- sprintf("%s/data/twoClass/higgs", BENCH_ROOT)
 model_path <- sprintf("%s/models/twoClass/higgs", BENCH_ROOT)
 train <- h2o.importFile(sprintf("%s/%s", data_path, train_csv))
 y <- "C1"
-x <- setdiff(names(data), y)
+x <- setdiff(names(train), y)
 family <- "binomial"
 train[,y] <- as.factor(train[,y])  #Convert outcome to a factor for binary classification
 
